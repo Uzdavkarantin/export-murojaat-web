@@ -5,6 +5,7 @@ import { createBrowserRouter, Navigate } from "react-router-dom";
 const Layout = lazy(async () => await import("@/layout"));
 const Dashboard = lazy(async () => await import("@/pages/dashboard"));
 const Users = lazy(async () => await import("@/pages/users"));
+const Inbox = lazy(async () => await import("@/pages/inbox"));
 const Login = lazy(async () => await import("@/pages/login"));
 const NotFound = lazy(async () => await import("@/pages/not-found"));
 
@@ -17,11 +18,15 @@ export const router = createBrowserRouter(
       children: [
         {
           index: true,
-          element: <Navigate to={ROUTER.USERS} />,
+          element: <Navigate to={ROUTER.INBOX} />,
         },
         {
           path: ROUTER.USERS,
           element: <Users />,
+        },
+        {
+          path: ROUTER.INBOX,
+          element: <Inbox />,
         },
         {
           path: ROUTER.DASHBOARD,

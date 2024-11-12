@@ -1,3 +1,5 @@
+"use client";
+
 import { Outlet } from "react-router-dom";
 import { Hoc } from "./hoc";
 import ErrorBoundary from "@/pages/error";
@@ -12,26 +14,39 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 const Layout = () => {
+  const isMobile = useIsMobile();
+
   return (
     <ErrorBoundary>
       <Hoc>
         <section className="">
-          <SidebarProvider>
+          <SidebarProvider
+            style={
+              {
+                "--sidebar-width": "350px",
+              } as React.CSSProperties
+            }
+          >
             <AppSidebar />
             <SidebarInset>
-              <header className="flex sticky top-0 bg-background h-16 shrink-0 items-center gap-2 border-b px-4">
-                <SidebarTrigger className="-ml-1" />
-                <Separator orientation="vertical" className="mr-2 h-4" />
+              <header className="sticky top-0 flex shrink-0 items-center gap-2 border-b bg-background p-4">
+                {isMobile && (
+                  <>
+                    <SidebarTrigger className="-ml-1" />
+                    <Separator orientation="vertical" className="mr-2 h-4" />
+                  </>
+                )}
                 <Breadcrumb>
                   <BreadcrumbList>
                     <BreadcrumbItem className="hidden md:block">
-                      <BreadcrumbLink href="#">Building Your Application</BreadcrumbLink>
+                      <BreadcrumbLink href="#">All Inboxes</BreadcrumbLink>
                     </BreadcrumbItem>
                     <BreadcrumbSeparator className="hidden md:block" />
                     <BreadcrumbItem>
-                      <BreadcrumbPage>Data Fetching</BreadcrumbPage>
+                      <BreadcrumbPage>Inbox</BreadcrumbPage>
                     </BreadcrumbItem>
                   </BreadcrumbList>
                 </Breadcrumb>
