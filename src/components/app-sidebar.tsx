@@ -19,7 +19,7 @@ const data = {
   user: {
     name: "Qudratjon",
     email: "m@example.com",
-    avatar: "/logo.png",
+    avatar: "/man.png",
   },
 };
 

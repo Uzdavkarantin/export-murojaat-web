@@ -1,3 +1,5 @@
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Input } from "@/components/ui/input";
 import { Link } from "react-router-dom";
 
 const mails = [
@@ -86,21 +88,37 @@ const mails = [
 export const Sidebar = () => {
   return (
     <div className="w-72 border-r h-full overflow-auto">
-      {mails.map(mail => (
-        <Link
-          to={mail.email}
-          key={mail.email}
-          className="flex flex-col items-start gap-2 whitespace-nowrap border-b p-4 text-sm leading-tight last:border-b-0 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
-        >
-          <div className="flex w-full items-center gap-2">
-            <span>{mail.name}</span> <span className="ml-auto text-xs">{mail.date}</span>
-          </div>
-          <span className="font-medium">{mail.subject}</span>
-          <span className="line-clamp-2 w-[260px] whitespace-break-spaces text-xs">
-            {mail.teaser}
-          </span>
-        </Link>
-      ))}
+      <div className="p-3">
+        <Input className="bg-muted" placeholder="Search" type="search" />
+      </div>
+      <div>
+        {mails.map(mail => (
+          <Link
+            to={mail.email}
+            key={mail.email}
+            className="flex items-center gap-4 whitespace-nowrap border-b p-4 text-sm leading-tight last:border-b-0 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
+          >
+            <Avatar>
+              {/* <AvatarImage src={img} alt={mail.name} /> */}
+              <AvatarFallback className="font-bold bg-primary/50">
+                {mail.name.slice(0, 1)}
+              </AvatarFallback>
+            </Avatar>
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center justify-between">
+                <h2 className="text-sm font-semibold truncate">{mail.name}</h2>
+                <span className="text-xs text-muted-foreground">12:36</span>
+              </div>
+              <div className="flex items-center gap-1">
+                <p className="text-sm text-muted-foreground truncate">
+                  Lorem ipsum dolor sit amet consectetur adipisicing elit. Asperiores, voluptas. Qui
+                  reprehenderit officia quia rem dolor, maxime eius consectetur dolore.
+                </p>
+              </div>
+            </div>
+          </Link>
+        ))}
+      </div>
     </div>
   );
 };
