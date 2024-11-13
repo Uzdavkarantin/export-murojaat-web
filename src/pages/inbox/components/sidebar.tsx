@@ -90,7 +90,7 @@ export const Sidebar = () => {
   const params = useParams();
 
   return (
-    <div className="w-72 border-r h-full overflow-auto">
+    <div className="w-full border-r h-full overflow-y-auto">
       <div className="p-3">
         <Input className="bg-muted" placeholder="Search" type="search" />
       </div>
@@ -100,7 +100,7 @@ export const Sidebar = () => {
             to={mail.email}
             key={mail.email}
             className={cn(
-              "flex items-center gap-4 whitespace-nowrap border-b p-4 text-sm leading-tight last:border-b-0 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
+              "flex items-center gap-4 border-b p-4 text-sm leading-tight last:border-b-0 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
               mail.email === params.id && "bg-sidebar-accent",
             )}
           >
@@ -111,14 +111,11 @@ export const Sidebar = () => {
             </Avatar>
             <div className="flex-1 min-w-0">
               <div className="flex items-center justify-between">
-                <h2 className="text-sm font-semibold truncate">{mail.name}</h2>
+                <h2 className="text-sm font-semibold">{mail.name}</h2>
                 <span className="text-xs text-muted-foreground">12:36</span>
               </div>
               <div className="flex items-center gap-1">
-                <p className="text-sm text-muted-foreground truncate">
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit. Asperiores, voluptas. Qui
-                  reprehenderit officia quia rem dolor, maxime eius consectetur dolore.
-                </p>
+                <p className="text-sm text-muted-foreground">{mail.teaser.slice(0, 50)}...</p>
               </div>
             </div>
           </Link>

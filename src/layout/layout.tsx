@@ -47,12 +47,12 @@ const Layout = () => {
                 <Separator orientation="vertical" className="mr-2 h-4" />
                 <Breadcrumb>
                   <BreadcrumbList>
-                    <BreadcrumbItem className="hidden md:block">
+                    <BreadcrumbItem className="block">
                       <Link to={location.pathname}>{pageTitle}</Link>
                     </BreadcrumbItem>
                     {params.id && (
                       <>
-                        <BreadcrumbSeparator className="hidden md:block" />
+                        <BreadcrumbSeparator className="block" />
                         <BreadcrumbItem>
                           <BreadcrumbPage>{params.id}</BreadcrumbPage>
                         </BreadcrumbItem>

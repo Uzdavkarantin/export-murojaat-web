@@ -3,9 +3,10 @@
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { SendHorizontal } from "lucide-react";
+import { ROUTER } from "@/constants/routers";
+import { ArrowLeft, SendHorizontal } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 interface Message {
   content: string;
@@ -14,7 +15,9 @@ interface Message {
 
 const Page = () => {
   const params = useParams();
+  const navigate = useNavigate();
   const chatContent = useRef<HTMLDivElement | null>(null);
+  const inputRef = useRef<HTMLInputElement | null>(null);
 
   const [messages, setMessages] = useState<Message[]>([
     { content: "Hi, how can I help you today?", sender: "agent" },
@@ -37,10 +40,22 @@ const Page = () => {
     }
   }, [messages]);
 
+  useEffect(() => {
+    inputRef.current?.focus();
+  }, [params.id]);
+
   return (
-    <div className="h-full overflow-auto flex flex-col justify-between">
+    <div className="h-full w-full overflow-y-auto flex flex-col justify-between max-sm:bg-background max-sm:fixed left-0 right-0 top-0 bottom-0 z-20">
       <div className="p-2 h-16 border-b flex items-center justify-between">
         <div className="flex items-center gap-3">
+          <Button
+            className="max-sm:flex hidden"
+            variant={"ghost"}
+            size={"icon"}
+            onClick={() => navigate(ROUTER.INBOX)}
+          >
+            <ArrowLeft />
+          </Button>
           <Avatar>
             <AvatarFallback className="font-bold">
               {params.id?.slice(0, 1).toLocaleUpperCase()}
@@ -95,6 +110,7 @@ const Page = () => {
             onChange={e => setNewMessage(e.target.value)}
             onKeyDown={e => e.key === "Enter" && handleSend()}
             className="flex-1"
+            ref={inputRef}
           />
           <Button size="icon" onClick={handleSend} disabled={newMessage.trim().length === 0}>
             <SendHorizontal className="h-5 w-5" />
