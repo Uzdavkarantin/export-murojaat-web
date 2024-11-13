@@ -1,6 +1,7 @@
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Input } from "@/components/ui/input";
-import { Link } from "react-router-dom";
+import { cn } from "@/lib/utils";
+import { Link, useParams } from "react-router-dom";
 
 const mails = [
   {
@@ -86,6 +87,8 @@ const mails = [
 ];
 
 export const Sidebar = () => {
+  const params = useParams();
+
   return (
     <div className="w-72 border-r h-full overflow-auto">
       <div className="p-3">
@@ -96,10 +99,12 @@ export const Sidebar = () => {
           <Link
             to={mail.email}
             key={mail.email}
-            className="flex items-center gap-4 whitespace-nowrap border-b p-4 text-sm leading-tight last:border-b-0 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
+            className={cn(
+              "flex items-center gap-4 whitespace-nowrap border-b p-4 text-sm leading-tight last:border-b-0 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
+              mail.email === params.id && "bg-sidebar-accent",
+            )}
           >
             <Avatar>
-              {/* <AvatarImage src={img} alt={mail.name} /> */}
               <AvatarFallback className="font-bold bg-primary/50">
                 {mail.name.slice(0, 1)}
               </AvatarFallback>
