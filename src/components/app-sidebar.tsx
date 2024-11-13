@@ -9,6 +9,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarRail,
+  useSidebar,
 } from "@/components/ui/sidebar";
 import { Link, useLocation } from "react-router-dom";
 import { sidebarMenuOptions } from "@/constants/sidebar";
@@ -25,6 +26,7 @@ const data = {
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const location = useLocation();
+  const { toggleSidebar } = useSidebar();
 
   return (
     <Sidebar {...props}>
@@ -42,6 +44,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               <SidebarMenuButton
                 asChild
                 isActive={`/${location.pathname.split("/")[1]}` === item.url}
+                onClick={toggleSidebar}
               >
                 <Link to={item.url}>
                   <item.icon />
