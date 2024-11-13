@@ -11,7 +11,6 @@ import {
   SidebarRail,
 } from "@/components/ui/sidebar";
 import { Link, useLocation } from "react-router-dom";
-import { ROUTER } from "@/constants/routers";
 import { sidebarMenuOptions } from "@/constants/sidebar";
 import { NavUser } from "./nav-user";
 
@@ -30,17 +29,20 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
     <Sidebar {...props}>
       <SidebarHeader>
-        <Link to={ROUTER.HOME} className="flex items-center">
+        <div className="flex items-center">
           <img src="/logo.png" alt="logo" className="w-14" />
           <h2 className="text-[10px] font-bold uppercase ml-2">
             O‘zbekiston Respublikasi Qishloq xo‘jaligi vazirligi huzuridagi O‘simliklar Karantini va
             Himoyasi Agentligi
           </h2>
-        </Link>
+        </div>
         <SidebarMenu>
           {sidebarMenuOptions.map(item => (
             <SidebarMenuItem key={item.url}>
-              <SidebarMenuButton asChild isActive={location.pathname === item.url}>
+              <SidebarMenuButton
+                asChild
+                isActive={`/${location.pathname.split("/")[1]}` === item.url}
+              >
                 <Link to={item.url}>
                   <item.icon />
                   <span>{item.title}</span>

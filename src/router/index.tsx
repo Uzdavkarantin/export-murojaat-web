@@ -6,6 +6,7 @@ const Layout = lazy(async () => await import("@/layout"));
 const Dashboard = lazy(async () => await import("@/pages/dashboard"));
 const Users = lazy(async () => await import("@/pages/users"));
 const Inbox = lazy(async () => await import("@/pages/inbox"));
+const Chat = lazy(async () => await import("@/pages/chat"));
 const Login = lazy(async () => await import("@/pages/login"));
 const NotFound = lazy(async () => await import("@/pages/not-found"));
 
@@ -27,6 +28,12 @@ export const router = createBrowserRouter(
         {
           path: ROUTER.INBOX,
           element: <Inbox />,
+          children: [
+            {
+              path: ROUTER.INBOX + ":id",
+              element: <Chat />,
+            },
+          ],
         },
         {
           path: ROUTER.DASHBOARD,
