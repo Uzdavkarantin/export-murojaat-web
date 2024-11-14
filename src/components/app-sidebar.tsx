@@ -26,7 +26,7 @@ const data = {
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const location = useLocation();
-  const { toggleSidebar } = useSidebar();
+  const { toggleSidebar, isMobile } = useSidebar();
 
   return (
     <Sidebar {...props}>
@@ -44,7 +44,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               <SidebarMenuButton
                 asChild
                 isActive={`/${location.pathname.split("/")[1]}` === item.url}
-                onClick={toggleSidebar}
+                onClick={() => (isMobile ? toggleSidebar() : null)}
               >
                 <Link to={item.url}>
                   <item.icon />
