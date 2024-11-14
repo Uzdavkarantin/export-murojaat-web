@@ -5,6 +5,16 @@ import { ROUTER } from "@/constants/routers";
 import { ArrowLeft, SendHorizontal } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import {
+  ContextMenu,
+  ContextMenuContent,
+  ContextMenuItem,
+  ContextMenuTrigger,
+} from "@/components/ui/context-menu";
+import { Separator } from "@/components/ui/separator";
+import { MdDelete, MdEdit } from "react-icons/md";
+import { IoCheckmarkDoneOutline } from "react-icons/io5";
+import { IoMdCopy } from "react-icons/io";
 
 interface Message {
   content: string;
@@ -84,21 +94,46 @@ const Page = () => {
           className="p-4 h-[calc(100vh-192px)] overflow-y-auto flex flex-col gap-4"
         >
           {messages.map((message, index) => (
-            <div
-              key={index}
-              className={`flex ${message.sender === "user" ? "justify-end" : "justify-start"}`}
-            >
-              <div
-                className={`max-w-[80%] rounded-2xl px-4 pr-14 py-2 relative ${
-                  message.sender === "user" ? "bg-primary text-primary-foreground" : "bg-muted"
-                }`}
-              >
-                <p className="text-sm">{message.content}</p>
-                <div className="text-end absolute right-3 bottom-1 z-[2]">
-                  <span className="text-xs">14:18</span>
+            <ContextMenu>
+              <ContextMenuTrigger>
+                <div
+                  key={index}
+                  className={`flex ${message.sender === "user" ? "justify-end" : "justify-start"}`}
+                >
+                  <div
+                    className={`max-w-[80%] rounded-2xl px-4 pr-14 py-2 relative ${
+                      message.sender === "user" ? "bg-primary text-primary-foreground" : "bg-muted"
+                    }`}
+                  >
+                    <p className="text-sm">{message.content}</p>
+                    <div className="text-end absolute right-3 bottom-1 z-[2]">
+                      <span className="text-xs">14:18</span>
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </div>
+              </ContextMenuTrigger>
+              <ContextMenuContent>
+                <ContextMenuItem>
+                  <IoMdCopy size={18} />
+                  <span className="ml-2">Copy Text</span>
+                </ContextMenuItem>
+                <Separator />
+                <ContextMenuItem>
+                  <IoCheckmarkDoneOutline size={18} />
+                  <span className="ml-2">13 Nov 2024 at 15:42:30</span>
+                </ContextMenuItem>
+                <Separator />
+                <ContextMenuItem>
+                  <MdEdit size={18} />
+                  <span className="ml-2">Edit</span>
+                </ContextMenuItem>
+                <Separator />
+                <ContextMenuItem>
+                  <MdDelete size={18} />
+                  <span className="ml-2">Delete</span>
+                </ContextMenuItem>
+              </ContextMenuContent>
+            </ContextMenu>
           ))}
         </div>
 
