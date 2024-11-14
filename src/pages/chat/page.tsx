@@ -75,12 +75,7 @@ const Page = () => {
       <div className="p-2 h-16 border-b flex items-center justify-between">
         <div className="flex items-center justify-between w-full gap-2">
           <div className="flex items-center gap-2">
-            <Button
-              className="max-sm:flex hidden"
-              variant={"ghost"}
-              size={"icon"}
-              onClick={() => navigate(ROUTER.INBOX)}
-            >
+            <Button variant={"ghost"} size={"icon"} onClick={() => navigate(ROUTER.INBOX)}>
               <ArrowLeft />
             </Button>
             <Avatar>
