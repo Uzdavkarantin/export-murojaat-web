@@ -11,10 +11,16 @@ import {
   ContextMenuItem,
   ContextMenuTrigger,
 } from "@/components/ui/context-menu";
-import { Separator } from "@/components/ui/separator";
 import { MdDelete, MdEdit } from "react-icons/md";
 import { IoCheckmarkDoneOutline } from "react-icons/io5";
-import { IoMdCopy } from "react-icons/io";
+import { IoMdCloseCircleOutline, IoMdCopy, IoMdSettings } from "react-icons/io";
+import { BsThreeDots } from "react-icons/bs";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 interface Message {
   content: string;
@@ -67,24 +73,47 @@ const Page = () => {
   return (
     <div className="h-full w-full overflow-y-auto flex flex-col justify-between max-sm:bg-background max-sm:fixed left-0 right-0 top-0 bottom-0 z-20">
       <div className="p-2 h-16 border-b flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <Button
-            className="max-sm:flex hidden"
-            variant={"ghost"}
-            size={"icon"}
-            onClick={() => navigate(ROUTER.INBOX)}
-          >
-            <ArrowLeft />
-          </Button>
-          <Avatar>
-            <AvatarFallback className="font-bold">
-              {params.id?.slice(0, 1).toLocaleUpperCase()}
-            </AvatarFallback>
-          </Avatar>
-          <div>
-            <h2 className="font-semibold">Sofia Davis</h2>
-            <p className="text-sm text-muted-foreground">{params.id}</p>
+        <div className="flex items-center justify-between w-full gap-2">
+          <div className="flex items-center gap-2">
+            <Button
+              className="max-sm:flex hidden"
+              variant={"ghost"}
+              size={"icon"}
+              onClick={() => navigate(ROUTER.INBOX)}
+            >
+              <ArrowLeft />
+            </Button>
+            <Avatar>
+              <AvatarFallback className="font-bold">
+                {params.id?.slice(0, 1).toLocaleUpperCase()}
+              </AvatarFallback>
+            </Avatar>
+            <div>
+              <h2 className="font-semibold">Sofia Davis</h2>
+              <p className="text-sm text-muted-foreground">{params.id}</p>
+            </div>
           </div>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button className="" variant={"ghost"} size={"icon"}>
+                <BsThreeDots />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="w-56 mr-2">
+              <DropdownMenuItem>
+                <IoMdSettings size={18} />
+                <span>Settings</span>
+              </DropdownMenuItem>
+              <DropdownMenuItem>
+                <IoMdCloseCircleOutline size={18} />
+                <span>Clear Chat History</span>
+              </DropdownMenuItem>
+              <DropdownMenuItem>
+                <MdDelete size={18} />
+                <span>Delete</span>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </div>
 
@@ -117,17 +146,14 @@ const Page = () => {
                   <IoMdCopy size={18} />
                   <span className="ml-2">Copy Text</span>
                 </ContextMenuItem>
-                <Separator />
                 <ContextMenuItem>
                   <IoCheckmarkDoneOutline size={18} />
                   <span className="ml-2">13 Nov 2024 at 15:42:30</span>
                 </ContextMenuItem>
-                <Separator />
                 <ContextMenuItem>
                   <MdEdit size={18} />
                   <span className="ml-2">Edit</span>
                 </ContextMenuItem>
-                <Separator />
                 <ContextMenuItem>
                   <MdDelete size={18} />
                   <span className="ml-2">Delete</span>
