@@ -19,6 +19,7 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 import { useTheme } from "next-themes";
+import { useUserStore } from "@/store/user";
 
 export function NavUser({
   user,
@@ -31,6 +32,7 @@ export function NavUser({
 }) {
   const { isMobile } = useSidebar();
   const { setTheme } = useTheme();
+  const logOut = useUserStore(state => state.setClearUser);
 
   return (
     <SidebarMenu>
@@ -99,7 +101,7 @@ export function NavUser({
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
 
-            <DropdownMenuItem>
+            <DropdownMenuItem onClick={logOut}>
               <LogOut />
               Log out
             </DropdownMenuItem>

@@ -118,10 +118,9 @@ const Page = () => {
           className="p-4 h-[calc(100vh-192px)] overflow-y-auto flex flex-col gap-4"
         >
           {messages.map((message, index) => (
-            <ContextMenu>
+            <ContextMenu key={index}>
               <ContextMenuTrigger>
                 <div
-                  key={index}
                   className={`flex ${message.sender === "user" ? "justify-end" : "justify-start"}`}
                 >
                   <div
