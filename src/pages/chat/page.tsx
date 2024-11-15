@@ -124,7 +124,7 @@ const Page = () => {
                   className={`flex ${message.sender === "user" ? "justify-end" : "justify-start"}`}
                 >
                   <div
-                    className={`max-w-[80%] rounded-2xl px-4 pr-14 py-2 relative ${
+                    className={`max-w-[80%] rounded-xl px-4 pr-14 py-2 relative ${
                       message.sender === "user" ? "bg-primary text-primary-foreground" : "bg-muted"
                     }`}
                   >
