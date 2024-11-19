@@ -22,7 +22,7 @@ request.interceptors.request.use(
 
 request.interceptors.response.use(
   response => {
-    return response.data;
+    return response;
   },
   async (error: ErrorProps) => {
     return await Promise.reject(error);
