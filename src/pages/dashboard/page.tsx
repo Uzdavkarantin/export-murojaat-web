@@ -8,6 +8,9 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
+import { useQuery } from "@tanstack/react-query";
+import { getStatistics } from "@/apis/dashboard/statistics";
+import { QUERY_KEYS } from "@/constants/query-keys";
 
 export const description = "An interactive bar chart";
 
@@ -121,6 +124,13 @@ const chartConfig = {
 
 const Page = () => {
   const [activeChart, setActiveChart] = React.useState<keyof typeof chartConfig>("desktop");
+
+  const { data } = useQuery({
+    queryKey: [QUERY_KEYS.GET_DASHBOARD_STATISTICS],
+    queryFn: getStatistics,
+  });
+
+  console.log(data);
 
   const total = React.useMemo(
     () => ({

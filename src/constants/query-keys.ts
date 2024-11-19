@@ -1,3 +1,3 @@
 export const QUERY_KEYS = {
-  GET_ALL: "get-all",
+  GET_DASHBOARD_STATISTICS: "get-dashboard-statistics",
 };

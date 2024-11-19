@@ -1,5 +1,6 @@
 import { baseURL } from "@/constants";
 import { ErrorProps } from "@/types/error";
+import { getUser } from "@/utils/user";
 import axios from "axios";
 
 export const request = axios.create({
@@ -8,6 +9,10 @@ export const request = axios.create({
 
 request.interceptors.request.use(
   async config => {
+    const user = getUser();
+    if (user) {
+      config.headers.set("Authorization", `Bearer ${user?.access}`);
+    }
     return config;
   },
   async error => {
@@ -17,7 +22,7 @@ request.interceptors.request.use(
 
 request.interceptors.response.use(
   response => {
-    return response;
+    return response.data;
   },
   async (error: ErrorProps) => {
     return await Promise.reject(error);
