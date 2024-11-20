@@ -15,10 +15,13 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { sidebarMenuOptions } from "@/constants/sidebar";
 import { useEffect, useState } from "react";
+import queryString from "query-string";
 
 const Layout = () => {
   const location = useLocation();
   const params = useParams();
+  const { name } = queryString.parse(window.location.search);
+
   const [pageTitle, setPageTitle] = useState<string>("");
 
   useEffect(() => {
@@ -54,7 +57,7 @@ const Layout = () => {
                       <>
                         <BreadcrumbSeparator className="block" />
                         <BreadcrumbItem>
-                          <BreadcrumbPage>{params.id}</BreadcrumbPage>
+                          <BreadcrumbPage>{name}</BreadcrumbPage>
                         </BreadcrumbItem>
                       </>
                     )}

@@ -55,7 +55,7 @@ export const Sidebar = () => {
           return (
             <Link
               key={user?.id}
-              to={user?.id?.toString()}
+              to={`${user?.id?.toString()}?name=${user.name}`}
               className={cn(
                 "flex items-center gap-4 border-b p-4 text-sm leading-tight hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
                 user?.id.toString() === params.id && "bg-sidebar-accent",
