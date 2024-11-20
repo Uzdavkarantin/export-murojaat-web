@@ -5,15 +5,8 @@ import { ROUTER } from "@/constants/routers";
 import { ArrowLeft, SendHorizontal } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import {
-  ContextMenu,
-  ContextMenuContent,
-  ContextMenuItem,
-  ContextMenuTrigger,
-} from "@/components/ui/context-menu";
-import { MdDelete, MdEdit } from "react-icons/md";
-import { IoCheckmarkDoneOutline } from "react-icons/io5";
-import { IoMdCloseCircleOutline, IoMdCopy, IoMdSettings } from "react-icons/io";
+import { MdDelete } from "react-icons/md";
+import { IoMdCloseCircleOutline, IoMdSettings } from "react-icons/io";
 import { BsThreeDots } from "react-icons/bs";
 import {
   DropdownMenu,
@@ -21,44 +14,63 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-
-interface Message {
-  content: string;
-  sender: "user" | "agent";
-}
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { QUERY_KEYS } from "@/constants/query-keys";
+import { answerSuggestion, getSuggestions } from "@/apis/users/chat";
+import { AnswerProps, SuggestionProps } from "@/types/suggestion";
+import { setUTCTime } from "@/utils/date";
 
 const Page = () => {
   const params = useParams();
   const navigate = useNavigate();
-  const chatContent = useRef<HTMLDivElement | null>(null);
+  const queryClient = useQueryClient();
+  const chatContentRef = useRef<HTMLDivElement | null>(null);
   const inputRef = useRef<HTMLInputElement | null>(null);
 
-  const [messages, setMessages] = useState<Message[]>([
-    { content: "Hi, how can I help you today?", sender: "agent" },
-    { content: "Hey, I'm having trouble with my account.", sender: "user" },
-    { content: "What seems to be the problem?", sender: "agent" },
-    { content: "I can't log in.", sender: "user" },
-  ]);
+  const [latestSuggestion, setLatestSuggestion] = useState<SuggestionProps | null>();
   const [newMessage, setNewMessage] = useState("");
 
-  const handleSend = () => {
-    if (newMessage.trim()) {
-      setMessages([...messages, { content: newMessage, sender: "user" }]);
+  const { data, isError, isLoading } = useQuery({
+    queryKey: [QUERY_KEYS.GET_USER_ID_SUGGESTIONS, params.id],
+    queryFn: () => getSuggestions(params.id),
+  });
+
+  const { mutate, isPending: isSending } = useMutation({
+    mutationFn: async (data: { text: string }) => {
+      if (latestSuggestion?.id) {
+        await answerSuggestion(latestSuggestion.id, data);
+      }
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEYS.GET_USER_ID_SUGGESTIONS],
+      });
+    },
+  });
+
+  useEffect(() => {
+    if (data?.data?.results) {
+      setLatestSuggestion(data?.data?.results[0]);
+    }
+  }, [data]);
+
+  const handleSend = (text: string) => {
+    if (text.trim()) {
+      mutate({ text });
       setNewMessage("");
     }
   };
 
   useEffect(() => {
-    if (chatContent.current) {
-      chatContent.current.scrollTop = chatContent.current.scrollHeight;
+    if (chatContentRef.current) {
+      chatContentRef.current.scrollTop = chatContentRef.current.scrollHeight;
     }
-  }, [messages]);
+  }, [data]);
 
   useEffect(() => {
     inputRef.current?.focus();
   }, [params.id]);
 
-  // Add Escape key handling for navigation
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
@@ -69,6 +81,11 @@ const Page = () => {
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [navigate]);
+
+  const messages = data?.data?.results?.slice().reverse() || [];
+
+  if (isLoading) return <div>Loading chat...</div>;
+  if (isError) return <div>Error loading chat. Please try again.</div>;
 
   return (
     <div className="h-full w-full overflow-y-auto flex flex-col justify-between max-sm:bg-background max-sm:fixed left-0 right-0 top-0 bottom-0 z-20">
@@ -112,75 +129,76 @@ const Page = () => {
         </div>
       </div>
 
-      <div>
-        <div
-          ref={chatContent}
-          className="p-4 h-[calc(100vh-192px)] overflow-y-auto flex flex-col gap-4"
-        >
-          {messages.map((message, index) => (
-            <ContextMenu key={index}>
-              <ContextMenuTrigger>
-                <div
-                  className={`flex ${message.sender === "user" ? "justify-end" : "justify-start"}`}
-                >
-                  <div
-                    className={`max-w-[80%] rounded-xl px-4 pr-14 py-2 relative ${
-                      message.sender === "user" ? "bg-primary text-primary-foreground" : "bg-muted"
-                    }`}
-                  >
-                    <p className="text-sm">{message.content}</p>
-                    <div className="text-end absolute right-3 bottom-1 z-[2]">
-                      <span className="text-xs">14:18</span>
-                    </div>
+      <div ref={chatContentRef} className="p-4 h-[100%] overflow-y-auto">
+        {messages.length === 0 ? (
+          <p className="text-center text-muted-foreground">
+            No messages yet. Start the conversation!
+          </p>
+        ) : (
+          messages.map((message: SuggestionProps, index: number) => (
+            <div key={index} className="flex flex-col">
+              {/* SUGGESTION */}
+              <div className={`flex justify-start my-1`}>
+                <div className={`max-w-[80%] rounded-xl px-4 pr-14 py-2 relative bg-muted`}>
+                  <p className="text-sm">
+                    <span className="text-blue-500">#{message.hashtag}</span>
+                    <br />
+                    {message.text}
+                  </p>
+                  <div className="text-end absolute right-3 bottom-1 z-[2]">
+                    <span className="text-xs">{setUTCTime(message.created_at, "hh:mm")}</span>
                   </div>
                 </div>
-              </ContextMenuTrigger>
-              <ContextMenuContent>
-                <ContextMenuItem>
-                  <IoMdCopy size={18} />
-                  <span className="ml-2">Copy Text</span>
-                </ContextMenuItem>
-                <ContextMenuItem>
-                  <IoCheckmarkDoneOutline size={18} />
-                  <span className="ml-2">13 Nov 2024 at 15:42:30</span>
-                </ContextMenuItem>
-                <ContextMenuItem>
-                  <MdEdit size={18} />
-                  <span className="ml-2">Edit</span>
-                </ContextMenuItem>
-                <ContextMenuItem>
-                  <MdDelete size={18} />
-                  <span className="ml-2">Delete</span>
-                </ContextMenuItem>
-              </ContextMenuContent>
-            </ContextMenu>
-          ))}
-        </div>
+              </div>
 
-        <div className="p-2 h-16 border-t flex items-center gap-2">
-          <Button size="icon" variant={"outline"} className="relative p-2">
-            <div
-              className="w-5 h-5 absolute dark:bg-white bg-black"
-              style={{
-                maskImage: "url(/attach.png)",
-                maskRepeat: "no-repeat",
-                maskSize: "contain",
-              }}
-            ></div>
-            <Input type="file" className="opacity-0" />
-          </Button>
-          <Input
-            placeholder="Type your message..."
-            value={newMessage}
-            onChange={e => setNewMessage(e.target.value)}
-            onKeyDown={e => e.key === "Enter" && handleSend()}
-            className="flex-1"
-            ref={inputRef}
-          />
-          <Button size="icon" onClick={handleSend} disabled={newMessage.trim().length === 0}>
-            <SendHorizontal className="h-5 w-5" />
-          </Button>
-        </div>
+              {/* ANSWER(S) */}
+              {message.answers
+                .slice()
+                .reverse()
+                .map((item: AnswerProps, i: number) => (
+                  <div className={`flex justify-end my-1`} key={i}>
+                    <div
+                      className={`max-w-[80%] rounded-xl px-4 pr-14 py-2 relative bg-primary text-primary-foreground`}
+                    >
+                      <p className="text-sm">{item.text}</p>
+                      <div className="text-end absolute right-3 bottom-1 z-[2]">
+                        <span className="text-xs">{setUTCTime(item.created_at, "hh:mm")}</span>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+            </div>
+          ))
+        )}
+      </div>
+      <div className="p-2 h-16 border-t flex items-center gap-2">
+        <Button size="icon" variant={"outline"} className="relative p-2">
+          <div
+            className="w-5 h-5 absolute dark:bg-white bg-black"
+            style={{
+              maskImage: "url(/attach.png)",
+              maskRepeat: "no-repeat",
+              maskSize: "contain",
+            }}
+          ></div>
+          <Input type="file" className="opacity-0" />
+        </Button>
+        <Input
+          placeholder="Type your message..."
+          value={newMessage}
+          onChange={e => setNewMessage(e.target.value)}
+          onKeyDown={e => e.key === "Enter" && handleSend(newMessage)}
+          className="flex-1"
+          ref={inputRef}
+        />
+        <Button
+          size="icon"
+          onClick={() => handleSend(newMessage)}
+          loading={isSending}
+          disabled={newMessage.trim().length === 0}
+        >
+          <SendHorizontal className="h-5 w-5" />
+        </Button>
       </div>
     </div>
   );

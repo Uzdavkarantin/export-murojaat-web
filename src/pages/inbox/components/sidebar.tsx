@@ -10,15 +10,17 @@ import { Link, useParams } from "react-router-dom";
 export const Sidebar = () => {
   const params = useParams();
   const [users, setUsers] = useState<UserProps[]>([]);
+  const [ws, setWs] = useState<WebSocket | null>(null);
 
   useEffect(() => {
-    const ws = new WebSocket(`${wsURL}top-users/`);
+    const websocket = new WebSocket(`${wsURL}top-users/`);
+    setWs(websocket);
 
-    ws.onopen = () => {
+    websocket.onopen = () => {
       console.log("WebSocket connection opened");
     };
 
-    ws.onmessage = event => {
+    websocket.onmessage = event => {
       try {
         const data = JSON.parse(event.data);
         setUsers(data.users || []);
@@ -27,14 +29,21 @@ export const Sidebar = () => {
       }
     };
 
-    ws.onclose = () => {
+    websocket.onclose = () => {
       console.log("WebSocket connection closed");
     };
 
     return () => {
-      ws.close();
+      websocket.close();
     };
   }, []);
+
+  const refreshWebSocket = () => {
+    if (ws) {
+      ws.send(JSON.stringify({ action: "refresh" }));
+      console.log("Sent refresh message to WebSocket server");
+    }
+  };
 
   return (
     <div className="w-full border-r h-full overflow-y-auto">
@@ -51,6 +60,7 @@ export const Sidebar = () => {
                 "flex items-center gap-4 border-b p-4 text-sm leading-tight last:border-b-0 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
                 user.id.toString() === params.id && "bg-sidebar-accent",
               )}
+              onClick={refreshWebSocket}
             >
               <Avatar>
                 <AvatarImage
