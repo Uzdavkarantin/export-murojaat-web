@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ROUTER } from "@/constants/routers";
 import { ArrowLeft, SendHorizontal } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { MdDelete } from "react-icons/md";
 import { IoMdCloseCircleOutline, IoMdSettings } from "react-icons/io";
@@ -21,6 +21,7 @@ import { AnswerProps, SuggestionProps } from "@/types/suggestion";
 import { setUTCTime } from "@/utils/date";
 import { Skeleton } from "@/components/ui/skeleton";
 import { getRobotUserById } from "@/apis/users/user";
+import { WsContext } from "../inbox/page";
 
 const Page = () => {
   const params = useParams();
@@ -29,6 +30,7 @@ const Page = () => {
   const chatContentRef = useRef<HTMLDivElement | null>(null);
   const inputRef = useRef<HTMLInputElement | null>(null);
 
+  const { ws } = useContext<any>(WsContext);
   const [latestSuggestion, setLatestSuggestion] = useState<SuggestionProps | null>();
   const [newMessage, setNewMessage] = useState("");
 
@@ -55,9 +57,16 @@ const Page = () => {
     },
   });
 
+  const refreshWebSocket = () => {
+    if (ws) {
+      ws.send(JSON.stringify({ action: "refresh" }));
+    }
+  };
+
   useEffect(() => {
-    if (data?.data?.results) {
-      setLatestSuggestion(data?.data?.results[0]);
+    if (data?.data) {
+      setLatestSuggestion(data?.data[0]);
+      refreshWebSocket();
     }
   }, [data]);
 
@@ -92,7 +101,7 @@ const Page = () => {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [navigate]);
 
-  const messages = data?.data?.results?.slice().reverse() || [];
+  const messages = data?.data?.slice()?.reverse() || [];
 
   if (isError)
     return (
@@ -189,6 +198,7 @@ const Page = () => {
                   <div className={`max-w-[80%] rounded-xl px-4 pr-14 py-2 relative bg-muted`}>
                     <p className="text-sm">
                       <span className="text-blue-500">#{message.hashtag}</span>
+                      <br />
                       <br />
                       {message.text}
                     </p>
