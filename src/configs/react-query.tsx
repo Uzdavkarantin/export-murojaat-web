@@ -6,7 +6,7 @@ const mutationCache = new MutationCache({
   onError: res => {
     const error = res as unknown as ErrorProps;
     console.log(error);
-    toast.error(error.response.data?.detail ?? error.response.statusText ?? "An Error Occured!");
+    toast.error(error.response.data?.detail ?? error.message ?? "An Error Occured!");
   },
 });
 
@@ -14,7 +14,7 @@ const queryCache = new QueryCache({
   onError: res => {
     const error = res as unknown as ErrorProps;
     console.log(error);
-    toast.error(error.response.data?.detail ?? error.response.statusText ?? "An Error Occured!");
+    toast.error(error.response.data?.detail ?? error.message ?? "An Error Occured!");
   },
 });
 
