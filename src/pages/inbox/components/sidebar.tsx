@@ -7,17 +7,6 @@ import { setUTCTime } from "@/utils/date";
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 
-// const mails = [
-//   {
-//     name: "William Smith",
-//     email: "williamsmith@example.com",
-//     subject: "Meeting Tomorrow",
-//     date: "09:34 AM",
-//     teaser:
-//       "Hi team, just a reminder about our meeting tomorrow at 10 AM.\nPlease come prepared with your project updates.",
-//   },
-// ];
-
 export const Sidebar = () => {
   const params = useParams();
   const [users, setUsers] = useState<UserProps[]>([]);
@@ -64,11 +53,15 @@ export const Sidebar = () => {
               )}
             >
               <Avatar>
-                <AvatarImage src={`${imgBaseURL}${user.profile_photo}`} />
+                <AvatarImage
+                  src={`${imgBaseURL}${user.profile_photo}`}
+                  alt={`${user.name}'s profile photo`}
+                />
                 <AvatarFallback className="font-bold bg-primary/50">
                   {user.name.slice(0, 1)}
                 </AvatarFallback>
               </Avatar>
+
               <div className="flex-1 min-w-0">
                 <div className="flex items-center justify-between">
                   <h2 className="text-sm font-semibold">{user.name}</h2>
@@ -76,17 +69,22 @@ export const Sidebar = () => {
                     {setUTCTime(user.last_message_time, "hh:mm")}
                   </span>
                 </div>
-                <div className="flex items-center gap-1">
-                  <p className="text-sm text-muted-foreground">
-                    {user.latest_msg_text.slice(0, 50)}...
+                <div className="flex items-end gap-1 justify-between">
+                  <p className="text-sm text-muted-foreground w-[calc(100%-20px)]">
+                    {user.latest_msg_text.length < 50
+                      ? user.latest_msg_text
+                      : `${user.latest_msg_text.slice(0, 50)}...`}
                   </p>
+                  {user.is_have_unread_msg && (
+                    <div className="w-4 h-4 rounded-full bg-destructive"></div>
+                  )}
                 </div>
               </div>
             </Link>
           );
         })}
 
-        {users.length === 0 ? <div className="p-4 text-center">No users available</div> : ""}
+        {users.length === 0 && <div className="p-4 text-center">No users available</div>}
       </div>
     </div>
   );
