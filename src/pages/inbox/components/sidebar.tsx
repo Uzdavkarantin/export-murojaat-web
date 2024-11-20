@@ -51,41 +51,41 @@ export const Sidebar = () => {
         <Input className="bg-muted" placeholder="Search" type="search" />
       </div>
       <div>
-        {users.map(user => {
+        {users?.map(user => {
           return (
             <Link
-              key={user.chatId}
-              to={user.id.toString()}
+              key={user?.id}
+              to={user?.id?.toString()}
               className={cn(
-                "flex items-center gap-4 border-b p-4 text-sm leading-tight last:border-b-0 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
-                user.id.toString() === params.id && "bg-sidebar-accent",
+                "flex items-center gap-4 border-b p-4 text-sm leading-tight hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
+                user?.id.toString() === params.id && "bg-sidebar-accent",
               )}
               onClick={refreshWebSocket}
             >
               <Avatar>
                 <AvatarImage
-                  src={`${imgBaseURL}${user.profile_photo}`}
-                  alt={`${user.name}'s profile photo`}
+                  src={`${imgBaseURL}${user?.profile_photo}`}
+                  alt={`${user?.name}'s profile photo`}
                 />
                 <AvatarFallback className="font-bold bg-primary/50">
-                  {user.name.slice(0, 1)}
+                  {user?.name?.slice(0, 1)}
                 </AvatarFallback>
               </Avatar>
 
               <div className="flex-1 min-w-0">
                 <div className="flex items-center justify-between">
-                  <h2 className="text-sm font-semibold">{user.name}</h2>
+                  <h2 className="text-sm font-semibold">{user?.name}</h2>
                   <span className="text-xs text-muted-foreground">
-                    {setUTCTime(user.last_message_time, "hh:mm")}
+                    {setUTCTime(user?.last_message_time, "hh:mm")}
                   </span>
                 </div>
                 <div className="flex items-end gap-1 justify-between">
                   <p className="text-sm text-muted-foreground w-[calc(100%-20px)]">
-                    {user.latest_msg_text.length < 50
-                      ? user.latest_msg_text
-                      : `${user.latest_msg_text.slice(0, 50)}...`}
+                    {user?.latest_msg_text?.length < 50
+                      ? user?.latest_msg_text
+                      : `${user?.latest_msg_text?.slice(0, 50)}...`}
                   </p>
-                  {user.is_have_unread_msg && (
+                  {user?.is_have_unread_msg && (
                     <div className="w-4 h-4 rounded-full bg-destructive"></div>
                   )}
                 </div>
@@ -94,7 +94,7 @@ export const Sidebar = () => {
           );
         })}
 
-        {users.length === 0 && <div className="p-4 text-center">No users available</div>}
+        {users?.length === 0 && <div className="p-4 text-center">No users available</div>}
       </div>
     </div>
   );
