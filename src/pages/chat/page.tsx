@@ -81,7 +81,7 @@ const Page = () => {
     if (chatContentRef.current) {
       chatContentRef.current.scrollTo({
         top: chatContentRef.current.scrollHeight,
-        behavior: "smooth",
+        // behavior: "smooth",
       });
     }
   }, [data]);
