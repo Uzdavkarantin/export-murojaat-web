@@ -6,7 +6,11 @@ const mutationCache = new MutationCache({
   onError: res => {
     const error = res as unknown as ErrorProps;
     console.log(error);
-    toast.error(error.response.data?.detail ?? error.message ?? "An Error Occured!");
+    if (error?.response) {
+      toast.error(error?.response?.data?.detail);
+    } else {
+      toast.error(error.message);
+    }
   },
 });
 
@@ -14,7 +18,11 @@ const queryCache = new QueryCache({
   onError: res => {
     const error = res as unknown as ErrorProps;
     console.log(error);
-    toast.error(error.response.data?.detail ?? error.message ?? "An Error Occured!");
+    if (error?.response) {
+      toast.error(error?.response?.data?.detail);
+    } else {
+      toast.error(error.message);
+    }
   },
 });
 
