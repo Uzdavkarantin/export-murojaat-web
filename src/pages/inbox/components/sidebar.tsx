@@ -7,12 +7,12 @@ import { setUTCTime } from "@/utils/date";
 import { useContext, useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { WsContext } from "../page";
-import { Button } from "@/components/ui/button";
 
 export const Sidebar = () => {
   const params = useParams();
   const { setWs } = useContext<any>(WsContext);
   const [users, setUsers] = useState<UserProps[]>([]);
+  const [search, setSearch] = useState<string>("");
 
   useEffect(() => {
     const websocket = new WebSocket(`${wsURL}top-users/`);
@@ -40,13 +40,23 @@ export const Sidebar = () => {
     };
   }, []);
 
+  const filteredUsers = users.filter(user =>
+    user.name.toLowerCase().includes(search.toLowerCase()),
+  );
+
   return (
     <div className="w-full h-full border-r overflow-y-auto">
       <div className="p-3">
-        <Input className="bg-muted" placeholder="Search" type="search" />
+        <Input
+          className="bg-muted"
+          placeholder="Search"
+          type="search"
+          value={search}
+          onChange={e => setSearch(e.target.value)}
+        />
       </div>
       <div>
-        {users?.map(user => {
+        {filteredUsers?.map(user => {
           return (
             <Link
               key={user?.id}
@@ -88,11 +98,18 @@ export const Sidebar = () => {
           );
         })}
 
-        {users?.length === 0 && (
-          <div className="p-4 text-center">
-            <Button variant="outline" className="rounded-full px-10">
-              No users available
-            </Button>
+        {filteredUsers?.length === 0 && (
+          <div className="text-center flex flex-col items-center">
+            <div
+              className="w-12 h-12 bg-muted-foreground"
+              style={{
+                maskImage: "url(/empty-folder.png)",
+                maskPosition: "center",
+                maskRepeat: "no-repeat",
+                maskSize: "cover",
+              }}
+            ></div>
+            <p className="text-muted-foreground ml-2 text-sm">No Users Available</p>
           </div>
         )}
       </div>

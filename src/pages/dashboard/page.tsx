@@ -12,7 +12,7 @@ const Page = () => {
   });
 
   return (
-    <div className="p-4 grid md:grid-cols-2 gap-5">
+    <div className="p-4">
       <PieStatistics data={statistics} />
     </div>
   );

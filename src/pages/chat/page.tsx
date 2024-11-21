@@ -188,9 +188,18 @@ const Page = () => {
         <div ref={chatContentRef} className="p-4 h-full overflow-y-auto">
           {messages.length === 0 ? (
             <div className="w-full h-full flex items-center justify-center">
-              <Button variant="outline" className="rounded-full px-10">
-                No messages here yet.
-              </Button>
+              <div className="text-center flex flex-col items-center">
+                <div
+                  className="w-12 h-12 bg-muted-foreground"
+                  style={{
+                    maskImage: "url(/empty-folder.png)",
+                    maskPosition: "center",
+                    maskRepeat: "no-repeat",
+                    maskSize: "cover",
+                  }}
+                ></div>
+                <p className="text-muted-foreground ml-2 text-sm">No messages here yet.</p>
+              </div>
             </div>
           ) : (
             messages.map((message: SuggestionProps, index: number) => (
