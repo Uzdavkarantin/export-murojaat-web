@@ -185,7 +185,7 @@ const Page = () => {
           ))}
         </div>
       ) : (
-        <div ref={chatContentRef} className="p-4 h-[100%] overflow-y-auto">
+        <div ref={chatContentRef} className="p-4 h-full overflow-y-auto">
           {messages.length === 0 ? (
             <div className="w-full h-full flex items-center justify-center">
               <p className="text-center text-muted-foreground">No messages here yet.</p>

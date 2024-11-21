@@ -7,6 +7,7 @@ import { setUTCTime } from "@/utils/date";
 import { useContext, useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { WsContext } from "../page";
+import { Button } from "@/components/ui/button";
 
 export const Sidebar = () => {
   const params = useParams();
@@ -40,7 +41,7 @@ export const Sidebar = () => {
   }, []);
 
   return (
-    <div className="w-full border-r h-full overflow-y-auto">
+    <div className="w-full h-full border-r overflow-y-auto">
       <div className="p-3">
         <Input className="bg-muted" placeholder="Search" type="search" />
       </div>
@@ -49,7 +50,7 @@ export const Sidebar = () => {
           return (
             <Link
               key={user?.id}
-              to={`${user?.id?.toString()}?name=${user.name}`}
+              to={`${user?.id}?name=${user.name}`}
               className={cn(
                 "flex items-center gap-4 border-b p-4 text-sm leading-tight hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
                 user?.id.toString() === params.id && "bg-sidebar-accent",
@@ -87,7 +88,13 @@ export const Sidebar = () => {
           );
         })}
 
-        {users?.length === 0 && <div className="p-4 text-center">No users available</div>}
+        {users?.length === 0 && (
+          <div className="p-4 text-center">
+            <Button variant="outline" className="rounded-full px-10">
+              No users available
+            </Button>
+          </div>
+        )}
       </div>
     </div>
   );

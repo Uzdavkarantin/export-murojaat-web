@@ -7,7 +7,9 @@ const mutationCache = new MutationCache({
     const error = res as unknown as ErrorProps;
     console.log(error);
     if (error?.response) {
-      toast.error(error?.response?.data?.detail);
+      toast.error(
+        error?.response?.data?.detail ? error?.response?.data?.detail : error?.response?.statusText,
+      );
     } else {
       toast.error(error.message);
     }
@@ -19,7 +21,9 @@ const queryCache = new QueryCache({
     const error = res as unknown as ErrorProps;
     console.log(error);
     if (error?.response) {
-      toast.error(error?.response?.data?.detail);
+      toast.error(
+        error?.response?.data?.detail ? error?.response?.data?.detail : error?.response?.statusText,
+      );
     } else {
       toast.error(error.message);
     }
