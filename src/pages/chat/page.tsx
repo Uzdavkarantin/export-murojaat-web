@@ -188,7 +188,9 @@ const Page = () => {
         <div ref={chatContentRef} className="p-4 h-full overflow-y-auto">
           {messages.length === 0 ? (
             <div className="w-full h-full flex items-center justify-center">
-              <p className="text-center text-muted-foreground">No messages here yet.</p>
+              <Button variant="outline" className="rounded-full px-10">
+                No messages here yet.
+              </Button>
             </div>
           ) : (
             messages.map((message: SuggestionProps, index: number) => (

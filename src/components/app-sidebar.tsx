@@ -18,8 +18,8 @@ import { NavUser } from "./nav-user";
 // This is sample data.
 const data = {
   user: {
-    name: "Qudratjon",
-    email: "m@example.com",
+    name: "Karantin agentligi",
+    email: "info@karantin.uz",
     avatar: "/man.png",
   },
 };

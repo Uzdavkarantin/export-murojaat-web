@@ -1,6 +1,6 @@
 "use client";
 
-import { BadgeCheck, Bell, ChevronsUpDown, LogOut, MoonIcon, SunIcon } from "lucide-react";
+import { ChevronsUpDown, LogOut, MoonIcon, SunIcon } from "lucide-react";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
@@ -77,11 +77,6 @@ export function NavUser({
               </DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuGroup>
-                <DropdownMenuItem>
-                  <BadgeCheck />
-                  Account
-                </DropdownMenuItem>
-
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
                     <DropdownMenuItem>
@@ -96,11 +91,6 @@ export function NavUser({
                     <DropdownMenuItem onClick={() => setTheme("system")}>System</DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
-
-                <DropdownMenuItem>
-                  <Bell />
-                  Notifications
-                </DropdownMenuItem>
               </DropdownMenuGroup>
               <DropdownMenuSeparator />
 
