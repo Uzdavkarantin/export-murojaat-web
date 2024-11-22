@@ -1,3 +1,3 @@
-import { PieStatistics } from "./pie-statistics";
+import { DashboardStatistics } from "./dashboard-statistics";
 
-export { PieStatistics };
+export { DashboardStatistics };
